@@ -1,0 +1,71 @@
+@import url(https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap);
+
+.App {
+  text-align: center;
+  background-color: beige;
+  height: 100vh;
+}
+
+header {
+  background-color: #282c34;
+  color: antiquewhite;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: x-large;
+  font-family: "Poetsen One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.main-body{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-box{
+  width: 30vw;
+  margin-top:20vh;
+}
+
+#text-input {
+  margin-left: 10vw;
+}
+
+#translation-output {
+  margin-right: 10vw;
+}
+
+#translate-butt {
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  font-size: larger;
+  margin-bottom: 5vh;
+}
+
+#mic-butt > img{
+  width: 4vw;
+  height: auto;
+  border-style: solid;
+  border-radius: 40px;
+}
+
+#mic-butt {
+  height: fit-content;
+  width: fit-content;
+  border-style: solid;
+  border-radius: 40px;
+}
+
+#input-butt-container {
+  margin-top: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
