@@ -3,8 +3,19 @@ import TextBox from './TextBox';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import mic_img from './icon/mic.webp';
+import { useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import { Button } from 'react-bootstrap';
 
 function App() {
+  const [originalText, setOriginalText] = useState({originaltext: ''});
+  const [translatedText, setTranslatedText] = useState({translatedtext: ''});
+
+  const inputText = (event) => {
+    const {name,value} = event.target;
+    setOriginalText((prevText) => ({...prevText, [name]: value}));
+  }
+
   return (
     <div className="App">
       <header>
@@ -13,18 +24,22 @@ function App() {
       <div className="main-body">
         <div className="text-box" id="text-input">
           <LanguageSelector />
-          <TextBox />
+          <Form>
+            <Form.Group className="text-area" controlId="formOrginalText">
+              <Form.Control as="textarea" type='input-text' name='originaltext' className='no-resize' value={originalText.originaltext} rows={11} placeholder='Enter Text' onChange={inputText}/>
+            </Form.Group>
+            <Button id='translate-butt'>Translate</Button>
+          </Form>
         </div>
         <div className="text-box" id="translation-output">
           <LanguageSelector />
-          <TextBox />
+          <Form>
+            <Form.Group className="text-area" controlId="formTranslatedText">
+              <Form.Control as="textarea" type='input-text' name='translatedtext' className='no-resize' value={translatedText.translatedtext} rows={11} placeholder='Translate' readOnly/>
+            </Form.Group>
+          </Form>
         </div>
       </div>
-      <div id="input-butt-container">
-        <button id="translate-butt">Translate</button>
-        <button id="mic-butt"><img src={mic_img} alt='mic button'/></button>
-      </div>
-
     </div>
   );
 }

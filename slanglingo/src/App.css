@@ -4,6 +4,7 @@
   text-align: center;
   background-color: beige;
   height: 100vh;
+  min-height: max-content;
 }
 
 header {
@@ -30,8 +31,21 @@ header {
 .text-box{
   width: 30vw;
   margin-top:20vh;
+  display: flex;
+  flex-direction: column;
 }
-
+#text-input{
+  align-items: flex-start;
+}
+#translation-output{
+  align-items: flex-end;
+}
+.text-area{
+  width: 30vw;
+}
+.no-resize {
+  resize: none;
+}
 #text-input {
   margin-left: 10vw;
 }
@@ -39,13 +53,20 @@ header {
 #translation-output {
   margin-right: 10vw;
 }
+.language-selector {
+  margin-bottom: 10px;
+}
 
 #translate-butt {
   border-style: solid;
   border-color: black;
   border-radius: 10px;
   font-size: larger;
-  margin-bottom: 5vh;
+  margin-top: 5vh;
+  position: absolute;
+  left: 46.8vw;
+  top: 70vh;
+
 }
 
 #mic-butt > img{
