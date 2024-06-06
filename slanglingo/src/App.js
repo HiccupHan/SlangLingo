@@ -26,11 +26,22 @@ function App() {
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
-    let text = "";
+    setModalText("");
     for (let slang in slangs) {
-      text += slang + ": " + slangs[slang];
+      const translateFullPrompt = translatePrompt1 + targetLanguage + translatePrompt2 + "does not contain any slangs";
+      setModalText(prevText => `${prevText}${slang + ": "}`);
+      axios.post(`${HTTP}`, { prompt: slangs[slang], translate: true, systemPrompt: translateFullPrompt})
+      .then(res=> {
+        setModalText(prevText => `${prevText}\n${res.data.response}`);
+        console.log(displaySlangs);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
     }
-    setModalText(text);
+    if(modalText == ""){
+      setDisplaySlangs("Does not contain any slangs.");
+    }
   }
   const inputText = (event) => {
     const { name, value } = event.target;
