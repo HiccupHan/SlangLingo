@@ -17,6 +17,7 @@ function App() {
   const translatePrompt2 = ", substituting slangs with equivalent phrases.\nThe sentence ";
   const inputText = (event) => {
     const {name,value} = event.target;
+    setTranslatedText((prevText) => ({...prevText, ["translatedtext"]: ""}))
     setOriginalText((prevText) => ({...prevText, [name]: value}));
   }
   const handleTranslate = (event) => {
