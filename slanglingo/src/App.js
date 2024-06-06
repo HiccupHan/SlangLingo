@@ -2,7 +2,7 @@ import LanguageSelector from './LanguageSelector';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import mic_img from './icon/mic.webp';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
@@ -22,6 +22,7 @@ function App() {
   const translatePrompt2 = ", substituting slangs with equivalent phrases.\nThe sentence ";
 
   const [show, setShow] = useState(false);
+  const [triggerAction, setTriggerAction] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -30,16 +31,16 @@ function App() {
     for (let slang in slangs) {
       const translateFullPrompt = translatePrompt1 + targetLanguage + translatePrompt2 + "does not contain any slangs";
       setModalText(prevText => `${prevText}${slang + ": "}`);
-      axios.post(`${HTTP}`, { prompt: slangs[slang], translate: true, systemPrompt: translateFullPrompt})
-      .then(res=> {
-        setModalText(prevText => `${prevText}\n${res.data.response}`);
-        console.log(displaySlangs);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
+      axios.post(`${HTTP}`, { prompt: slangs[slang], translate: true, systemPrompt: translateFullPrompt })
+        .then(res => {
+          setModalText(prevText => `${prevText}\n${res.data.response}`);
+          console.log(displaySlangs);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
     }
-    if(modalText == ""){
+    if (modalText == "") {
       setDisplaySlangs("Does not contain any slangs.");
     }
   }
@@ -89,6 +90,26 @@ function App() {
       })
   }
 
+  const changeTargetLanguage = (len) => {
+    setTargetLanguage(len);
+    setTranslatedText((prevText) => ({ ...prevText, ["translatedtext"]: "" }))
+    setTriggerAction(true);
+  }
+
+  useEffect(() => {
+    if (triggerAction) {
+      const translateFullPrompt = translatePrompt1 + targetLanguage + translatePrompt2 + slangPrompt;
+      console.log(translateFullPrompt);
+      axios.post(`${HTTP}`, { prompt: originalText.originaltext, translate: true, systemPrompt: translateFullPrompt })
+        .then(res => {
+          setTranslatedText((prevText) => ({ ...prevText, ["translatedtext"]: res.data.response }))
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+      setTriggerAction(false);
+    }
+  }, [targetLanguage, triggerAction]);
 
   return (
     <div className="App">
@@ -106,7 +127,7 @@ function App() {
           </Form>
         </div>
         <div className="text-box" id="translation-output">
-          <LanguageSelector setLanguage={setTargetLanguage} language={targetLanguage} />
+          <LanguageSelector setLanguage={changeTargetLanguage} language={targetLanguage} />
           <Form>
             <Form.Group className="text-area" controlId="formTranslatedText">
               <Form.Control as="textarea" type='input-text' name='translatedtext' className='no-resize' value={translatedText.translatedtext} rows={11} placeholder='Translate' readOnly />
