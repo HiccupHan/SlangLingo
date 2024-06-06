@@ -2,6 +2,7 @@ import LanguageSelector from './LanguageSelector';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import mic_img from './icon/mic.webp';
+import recording_img from './icon/recording.webp';
 import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
@@ -136,6 +137,10 @@ function App() {
     setOriginalText((prevText) => ({ ...prevText, ["originaltext"]: transcript }));
   }
 
+  const handleRecord  = () => {
+    listening ? stopListening():startListening();
+  }
+
   return (
     <div className="App">
       <header>
@@ -149,7 +154,7 @@ function App() {
               <Form.Control as="textarea" type='input-text' name='originaltext' className='no-resize' value={useTranscript? transcript : originalText.originaltext} rows={11} placeholder='Enter Text' onChange={inputText} />
             </Form.Group>
             <Button id='translate-butt' variant='primary' type='submit'>Translate</Button>
-            <img src={mic_img} id='mic-butt' onMouseDown={startListening} onMouseUp={stopListening}/>
+            <img src={listening ? recording_img : mic_img} id='mic-butt' onClick={handleRecord}/>
           </Form>
         </div>
         <div className="text-box" id="translation-output">
