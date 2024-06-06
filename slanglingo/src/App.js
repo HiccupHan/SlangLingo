@@ -12,6 +12,7 @@ function App() {
   const [slangPrompt, setSlangPrompt] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("English");
   const [originLanguage, setOriginLanguage] = useState("English");
+  const [slangs, setSlangs] = useState({});
   const HTTP = "http://localhost:8020/translate";
   const translatePrompt1 = "Here are one or more English sentences that may contain slangs. Tanslate the sentences into ";
   const translatePrompt2 = ", substituting slangs with equivalent phrases.\nThe sentence ";
@@ -19,12 +20,31 @@ function App() {
     const {name,value} = event.target;
     setTranslatedText((prevText) => ({...prevText, ["translatedtext"]: ""}))
     setOriginalText((prevText) => ({...prevText, [name]: value}));
+    setSlangs({});
   }
   const handleTranslate = (event) => {
     event.preventDefault();
     axios.post(`${HTTP}`, {prompt: originalText.originaltext, translate: false})
     .then(res=>{
       setSlangPrompt(res.data.response);
+      if(!slangPrompt.includes("does not contain any slangs")){
+        const lines = slangPrompt.trim().split('\n');
+        const header = lines[0];
+        if (header.toLowerCase().includes("contains slangs:")) {
+          lines.shift();
+        }
+        let slangMap = {};
+        for(let line of lines){
+          const slangDef = line.split('-');
+          if(slangDef.length === 2){
+            const slang = slangDef[0].trim();
+            const definition = slangDef[1].trim();
+            slangMap[slang] = definition;
+          }
+          setSlangs(slangMap);
+          console.log(slangMap);
+        }
+      }
       const translateFullPrompt = translatePrompt1 + targetLanguage + translatePrompt2 + slangPrompt;
       console.log(translateFullPrompt);
       axios.post(`${HTTP}`, {prompt: originalText.originaltext, translate: true, systemPrompt: translateFullPrompt})
