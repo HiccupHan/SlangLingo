@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 function App() {
   const [originalText, setOriginalText] = useState({ originaltext: '' });
@@ -23,6 +24,18 @@ function App() {
 
   const [show, setShow] = useState(false);
   const [triggerAction, setTriggerAction] = useState(false);
+  const [useTranscript, setUseTranscript] = useState(false);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
+  if(!browserSupportsSpeechRecognition){
+    console.log("cannot use speech recognition");
+  }
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -45,6 +58,8 @@ function App() {
     }
   }
   const inputText = (event) => {
+    setUseTranscript(false);
+    resetTranscript();
     const { name, value } = event.target;
     setTranslatedText((prevText) => ({ ...prevText, ["translatedtext"]: "" }))
     setOriginalText((prevText) => ({ ...prevText, [name]: value }));
@@ -111,6 +126,16 @@ function App() {
     }
   }, [targetLanguage, triggerAction]);
 
+  const startListening = () =>{
+    setUseTranscript(true);
+    SpeechRecognition.startListening();
+  }
+
+  const stopListening = () => {
+    SpeechRecognition.stopListening();
+    setOriginalText((prevText) => ({ ...prevText, ["originaltext"]: transcript }));
+  }
+
   return (
     <div className="App">
       <header>
@@ -121,9 +146,10 @@ function App() {
           <LanguageSelector setLanguage={setOriginLanguage} language={originLanguage} />
           <Form onSubmit={handleTranslate}>
             <Form.Group className="text-area" controlId="formOrginalText">
-              <Form.Control as="textarea" type='input-text' name='originaltext' className='no-resize' value={originalText.originaltext} rows={11} placeholder='Enter Text' onChange={inputText} />
+              <Form.Control as="textarea" type='input-text' name='originaltext' className='no-resize' value={useTranscript? transcript : originalText.originaltext} rows={11} placeholder='Enter Text' onChange={inputText} />
             </Form.Group>
             <Button id='translate-butt' variant='primary' type='submit'>Translate</Button>
+            <img src={mic_img} id='mic-butt' onMouseDown={startListening} onMouseUp={stopListening}/>
           </Form>
         </div>
         <div className="text-box" id="translation-output">
@@ -137,7 +163,7 @@ function App() {
       </div>
       {displaySlangs && <Button id='slang-butt' onClick={handleShow}>Slangs</Button>}
       <Modal show={show} onHide={handleClose}
-        size="lg"
+        size="sm"
         aria-labelledby="contained-modal-title-vcenter"
         centered>
         <Modal.Header closeButton>

@@ -69,19 +69,13 @@ header {
 
 }
 
-#mic-butt > img{
-  width: 4vw;
+#mic-butt {
+  width: 3vw;
   height: auto;
-  border-style: solid;
-  border-radius: 40px;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
-#mic-butt {
-  height: fit-content;
-  width: fit-content;
-  border-style: solid;
-  border-radius: 40px;
-}
 
 #input-butt-container {
   margin-top: 10vh;
