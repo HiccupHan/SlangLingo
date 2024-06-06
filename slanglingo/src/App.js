@@ -37,7 +37,6 @@ function App() {
     console.log("cannot use speech recognition");
   }
 
-
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
@@ -47,7 +46,7 @@ function App() {
       setModalText(prevText => `${prevText}${slang + ": "}`);
       axios.post(`${HTTP}`, { prompt: slangs[slang], translate: true, systemPrompt: translateFullPrompt })
         .then(res => {
-          setModalText(prevText => `${prevText}\n${res.data.response}`);
+          setModalText(prevText => `${prevText}${res.data.response}\n`);
           console.log(displaySlangs);
         })
         .catch((error) => {
@@ -55,7 +54,7 @@ function App() {
         })
     }
     if (modalText == "") {
-      setDisplaySlangs("Does not contain any slangs.");
+      setModalText("Does not contain any slangs.");
     }
   }
   const inputText = (event) => {
@@ -109,7 +108,9 @@ function App() {
   const changeTargetLanguage = (len) => {
     setTargetLanguage(len);
     setTranslatedText((prevText) => ({ ...prevText, ["translatedtext"]: "" }))
-    setTriggerAction(true);
+    if(originalText.originaltext != ""){
+      setTriggerAction(true);
+    }
   }
 
   useEffect(() => {
@@ -153,7 +154,7 @@ function App() {
             <Form.Group className="text-area" controlId="formOrginalText">
               <Form.Control as="textarea" type='input-text' name='originaltext' className='no-resize' value={useTranscript? transcript : originalText.originaltext} rows={11} placeholder='Enter Text' onChange={inputText} />
             </Form.Group>
-            <Button id='translate-butt' variant='primary' type='submit'>Translate</Button>
+            <Button id='translate-butt' type='submit' variant='dark'>Translate</Button>
             <img src={listening ? recording_img : mic_img} id='mic-butt' onClick={handleRecord}/>
           </Form>
         </div>
@@ -166,7 +167,7 @@ function App() {
           </Form>
         </div>
       </div>
-      {displaySlangs && <Button id='slang-butt' onClick={handleShow}>Slangs</Button>}
+      {displaySlangs && <Button id='slang-butt' onClick={handleShow} variant='dark'>Slangs</Button>}
       <Modal show={show} onHide={handleClose}
         size="sm"
         aria-labelledby="contained-modal-title-vcenter"

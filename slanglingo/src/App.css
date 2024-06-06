@@ -78,6 +78,10 @@ header {
   left: 48.6vw;
   top: 80vh;
 }
+#slang-butt {
+  position: relative;
+  top: 2vh;
+}
 
 #input-butt-container {
   margin-top: 10vh;
