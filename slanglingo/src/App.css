@@ -57,30 +57,29 @@ header {
   margin-bottom: 10px;
 }
 
+.butt-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2vh;
+}
+
 #translate-butt {
   border-style: solid;
   border-color: black;
   border-radius: 10px;
   font-size: larger;
-  margin-top: 5vh;
-  position: absolute;
-  left: 47.2vw;
-  top: 70vh;
-
+  margin: 1vh;
 }
 
 #mic-butt {
   width: 3vw;
   height: auto;
-  margin-top: 10px;
   cursor: pointer;
-  position: absolute;
-  left: 48.6vw;
-  top: 80vh;
+  margin: 1vh;
 }
 #slang-butt {
-  position: relative;
-  top: 2vh;
 }
 
 #input-butt-container {

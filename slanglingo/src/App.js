@@ -150,12 +150,10 @@ function App() {
       <div className="main-body">
         <div className="text-box" id="text-input">
           <LanguageSelector setLanguage={setOriginLanguage} language={originLanguage} />
-          <Form onSubmit={handleTranslate}>
+          <Form id="translate-box" onSubmit={handleTranslate}>
             <Form.Group className="text-area" controlId="formOrginalText">
               <Form.Control as="textarea" type='input-text' name='originaltext' className='no-resize' value={useTranscript? transcript : originalText.originaltext} rows={11} placeholder='Enter Text' onChange={inputText} />
             </Form.Group>
-            <Button id='translate-butt' type='submit' variant='dark'>Translate</Button>
-            <img src={listening ? recording_img : mic_img} id='mic-butt' onClick={handleRecord}/>
           </Form>
         </div>
         <div className="text-box" id="translation-output">
@@ -167,7 +165,11 @@ function App() {
           </Form>
         </div>
       </div>
-      {displaySlangs && <Button id='slang-butt' onClick={handleShow} variant='dark'>Slangs</Button>}
+      <div className='butt-box'>
+        <Button id='translate-butt' type='submit' variant='dark' form='translate-box'>Translate</Button>
+        <img src={listening ? recording_img : mic_img} id='mic-butt' onClick={handleRecord}/>
+        {displaySlangs && <Button id='slang-butt' onClick={handleShow} variant='dark'>Slangs</Button>}
+      </div>
       <Modal show={show} onHide={handleClose}
         size="sm"
         aria-labelledby="contained-modal-title-vcenter"
